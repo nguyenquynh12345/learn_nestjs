@@ -1,11 +1,18 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
 
-
-@Controller('users') // Đường dẫn API
+@Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Get('/list')
   async findAll(): Promise<User[]> {
@@ -18,14 +25,15 @@ export class UserController {
   }
 
   @Post()
-  async create(@Body() user: Partial<User>): Promise<User> {
-    console.log(user);
-
+  async create(@Body() user: Partial<User>): Promise<User | string> {
     return this.userService.create(user);
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() userData: Partial<User>): Promise<User> {
+  async update(
+    @Param('id') id: number,
+    @Body() userData: Partial<User>,
+  ): Promise<User> {
     return this.userService.update(id, userData);
   }
 
