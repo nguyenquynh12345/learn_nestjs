@@ -8,7 +8,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<User[]> {
     return await this.userRepository.find();
@@ -19,30 +19,40 @@ export class UserService {
   }
 
   async create(user: Partial<User>): Promise<User | any> {
-    if (user.userName.length > 5) {
+    // Kiểm tra độ dài tài khoản phải lớn hơn 5 ký tự
+    if (user.userName && user.userName.length <= 5) {
       return {
         code: 400,
-        message: 'Tài khoản không được nhở hơn 5 ký tự',
+        message: 'Tài khoản phải có ít nhất 6 ký tự',
         data: null,
       };
     }
-    const check = await this.userRepository.findOne({
-      where: {
-        userName: user.userName,
-      },
+
+    const existingUser = await this.userRepository.findOne({
+      where: { userName: user.userName },
     });
-    if (check) {
+
+    if (existingUser) {
       return {
         code: 400,
         message: 'Tài khoản đã tồn tại',
         data: null,
       };
     }
+
     return await this.userRepository.save(user);
   }
 
   async update(id: number, userData: Partial<User>): Promise<User> {
+    const user = await this.userRepository.findOne(id as any);
+    if (!user) {
+      throw new Error('Người dùng không tồn tại');
+    }
+
+    // Cập nhật thông tin người dùng
     await this.userRepository.update(id, userData);
+
+    // Trả về thông tin người dùng sau khi cập nhật
     return this.findOne(id);
   }
 
