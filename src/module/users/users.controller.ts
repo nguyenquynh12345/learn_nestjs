@@ -16,7 +16,7 @@ import { GetUserId } from 'src/decorators/get-user.decorator';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
   getProfile(@GetUserId() id: number) {
@@ -32,7 +32,7 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Post()
+  @Post('/create')
   async create(@Body() user: Partial<User>): Promise<User | string> {
     return this.userService.create(user);
   }
@@ -42,6 +42,7 @@ export class UserController {
     @Param('id') id: number,
     @Body() userData: Partial<User>,
   ): Promise<User> {
+
     return this.userService.update(id, userData);
   }
 

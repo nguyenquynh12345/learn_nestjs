@@ -3,32 +3,37 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: my-mysql-container
+    container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: test_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: userpassword
+      MYSQL_ROOT_PASSWORD: rootpassword # Mật khẩu root của MySQL
+      MYSQL_DATABASE: test_db # Cơ sở dữ liệu mặc định được tạo
+      MYSQL_USER: user # Tên người dùng bổ sung
+      MYSQL_PASSWORD: userpassword # Mật khẩu cho người dùng bổ sung
     ports:
-      - "3306:3306"
+      - "3306:3306" # Mở cổng MySQL
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql # Gắn kết dữ liệu MySQL vào volume
     networks:
       - my-network
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin-container
     environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: rootpassword
+      PMA_HOST: mysql-container # Tên container MySQL (phải trùng với `container_name` của MySQL)
+      PMA_PORT: 3306 # Cổng MySQL
     ports:
-      - "8080:80"
+      - "8080:80" # Mở cổng để truy cập PHPMyAdmin
     depends_on:
-      - mysql
+      - mysql # Đảm bảo MySQL khởi động trước
+    networks:
+      - my-network
+
 volumes:
   mysql_data:
-
+    # Volume để lưu trữ dữ liệu MySQL
 
 networks:
   my-network:
+    # Mạng riêng để các container giao tiếp với nhau
+    driver: bridge

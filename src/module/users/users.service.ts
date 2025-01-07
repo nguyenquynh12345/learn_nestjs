@@ -43,8 +43,11 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async update(id: number, userData: Partial<User>): Promise<User> {
-    const user = await this.userRepository.findOne(id as any);
+  async update(id: any, userData: any): Promise<any> {
+    const user = await this.userRepository.findOne({
+      where: { id: userData.id },
+    });;
+
     if (!user) {
       throw new Error('Người dùng không tồn tại');
     }
@@ -56,7 +59,12 @@ export class UserService {
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<any> {
     await this.userRepository.delete(id);
+    return {
+      code: 200,
+      message: 'Xóa người dùng thành công',
+      data: null,
+    };
   }
 }
