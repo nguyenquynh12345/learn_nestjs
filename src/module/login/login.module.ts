@@ -1,20 +1,23 @@
-// src/modules/login/login.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt'; // Thêm JwtModule
+import { PassportModule } from '@nestjs/passport';
 import { LoginController } from './login.controller';
 import { LoginService } from './login.service';
+import { JwtStrategy } from './jwt.strategy'; // Thêm JwtStrategy để xác thực token
 import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]), // Đảm bảo User entity được kết nối
+    TypeOrmModule.forFeature([User]),
+    PassportModule, // Để sử dụng chiến lược xác thực Passport
     JwtModule.register({
-      secret: 'your-secret-key', // Sử dụng secret key của bạn (hoặc environment variable)
-      signOptions: { expiresIn: '1h' }, // Thời gian hết hạn của token
+      secret: '123456', // Khóa bí mật để giải mã token
+      signOptions: { expiresIn: '1h' }, // Thời hạn của token
     }),
   ],
   controllers: [LoginController],
-  providers: [LoginService], // (nếu sử dụng JwtStrategy để xác thực)
+  providers: [LoginService, JwtStrategy], // Thêm JwtStrategy vào provider
+  exports: [JwtModule], // Export JwtModule để dùng trong module khác
 })
-export class LoginModule { }
+export class LoginModule {}

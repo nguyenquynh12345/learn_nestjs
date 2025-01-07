@@ -6,14 +6,22 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
+import { JwtAuthGuard } from '../login/jwt-auth.guard';
+import { GetUserId } from 'src/decorators/get-user.decorator';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  @Get('/profile')
+  @UseGuards(JwtAuthGuard)
+  getProfile(@GetUserId() id: number) {
+    return this.userService.findOne(id);
+  }
   @Get('/list')
   async findAll(): Promise<User[]> {
     return this.userService.findAll();

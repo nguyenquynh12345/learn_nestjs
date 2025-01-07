@@ -14,7 +14,7 @@ export class LoginService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService, // Inject JwtService để tạo JWT token
-  ) { }
+  ) {}
 
   // API login
   async login(loginDto: LoginDto): Promise<any> {
@@ -43,19 +43,16 @@ export class LoginService {
 
     // Trả về thông tin người dùng và token
     return {
-      user: {
-        id: user.id,
-        userName: user.userName,
-        email: user.email,
+      data: {
+        access_token: token,
+        refresh_token: token,
       },
-      token,
+      message: null,
+      statusCode: 1,
     };
   }
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { userName, password, email } = createUserDto;
-    console.log(userName, "userName");
-
-    // Kiểm tra xem tên tài khoản có tồn tại chưa
     // const existingUser = await this.userRepository.findOne({ where: { userName } });
     // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
     const saltRounds = 10;
@@ -71,5 +68,4 @@ export class LoginService {
     // Lưu người dùng vào cơ sở dữ liệu
     return this.userRepository.save(newUser);
   }
-
 }
