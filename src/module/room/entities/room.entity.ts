@@ -19,6 +19,12 @@ export class Room {
   @Column()
   capacity: number;
 
+  @Column()
+  imageUrl: string;
+
+  @Column()
+  roomType: string;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 

@@ -10,6 +10,8 @@ import { RoomModule } from './module/room/room.module';
 import { CategoryRoomModule } from './module/category-room/category-room.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './module/login/jwt-auth.guard';
+import { UploadModule } from './module/upload/upload.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -20,11 +22,16 @@ import { JwtAuthGuard } from './module/login/jwt-auth.guard';
         createTypeMysqlOrmOptions(),
       inject: [ConfigService],
     }),
+    MulterModule.register({
+      dest: './uploads',
+    }),
+    UploadModule,
     UserModule,
     LoginModule,
     RoomModule,
     CategoryRoomModule,
     JwtModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

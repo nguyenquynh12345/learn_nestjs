@@ -8,7 +8,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<User[]> {
     return await this.userRepository.find();
@@ -44,7 +44,9 @@ export class UserService {
   }
 
   async update(id: number, userData: Partial<User>): Promise<User> {
-    const user = await this.userRepository.findOne(id as any);
+    const user = await this.userRepository.findOne({
+      where: { id: userData.id },
+    });
     if (!user) {
       throw new Error('Người dùng không tồn tại');
     }
