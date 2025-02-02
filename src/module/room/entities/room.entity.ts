@@ -23,8 +23,23 @@ export class Room {
   imageUrl: string;
 
   @Column()
+  userId: number;
+  @Column()
+  categories: number;
+
+  @Column()
   roomType: string;
 
+  @Column()
+  address: string;
+  @Column()
+  region: number;
+  @Column()
+  utilities: string;
+  @Column()
+  waterPrice: string;
+  @Column()
+  electricityPrice: string;
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 

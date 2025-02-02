@@ -12,6 +12,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './module/login/jwt-auth.guard';
 import { UploadModule } from './module/upload/upload.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { SearchModule } from './module/search/search.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MulterModule } from '@nestjs/platform-express';
     CategoryRoomModule,
     JwtModule,
     UploadModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

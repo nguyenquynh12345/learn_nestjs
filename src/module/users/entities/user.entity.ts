@@ -10,8 +10,10 @@ export class User {
 
     @Column()
     userName: string;
-
+    @Column()
+    phone: string;
     @Column()
     password: string;
-
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    created_at: Date;
 }
