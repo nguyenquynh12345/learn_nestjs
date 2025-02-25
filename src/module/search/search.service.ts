@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike, Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
-import { Room } from '../room/entities/room.entity';
-import { UserService } from '../users/users.service';
+import { UsersService } from '../users/users.service';
+import { Listing } from '../listings/entities/listing.entity';
 
 
 @Injectable()
 export class SearchService {
   constructor(
-    @InjectRepository(Room)
-    private readonly roomRepository: Repository<Room>,
+    @InjectRepository(Listing)
+    private readonly roomRepository: Repository<Listing>,
 
-    private readonly usersService: UserService, // Inject user service
+    private readonly usersService: UsersService, // Inject user service
   ) { }
 
   async searchRooms(query: string, price: string, region: number, categories: string): Promise<any[]> {
@@ -49,7 +49,7 @@ export class SearchService {
     // Lấy thông tin user bằng Promise.all để tối ưu
     const newData = await Promise.all(
       data.map(async (room) => {
-        const user = await this.usersService.findOne(room.userId);
+        const user = await this.usersService.findOne(1);
         return { ...room, user };
       }),
     );

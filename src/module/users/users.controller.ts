@@ -1,53 +1,39 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Put,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
-import { User } from './entities/user.entity';
-import { UserService } from './users.service';
-import { JwtAuthGuard } from '../login/jwt-auth.guard';
-import { GetUserId } from 'src/decorators/get-user.decorator';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards, Request } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Controller('users')
-export class UserController {
-  constructor(private readonly userService: UserService) { }
-  @Get('/profile')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) { }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
   @UseGuards(JwtAuthGuard)
-  getProfile(@GetUserId() id: number) {
-    return this.userService.findOne(id);
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
-  @Get('/list')
-  async findAll(): Promise<User[]> {
-    return this.userService.findAll();
-  }
-
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<User> {
-    return this.userService.findOne(id);
-  }
-
-  @Post('/create')
-  async create(@Body() user: Partial<User>): Promise<User | string> {
-    return this.userService.create(user);
+  findOne(@Param('id') id: number) {
+    return this.usersService.findOne(+id);
   }
 
   @Put(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() userData: Partial<User>,
-  ): Promise<User> {
-
-    return this.userService.update(id, userData);
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
-    return this.userService.remove(id); // Xóa người dùng
+  remove(@Param('id') id: number) {
+    return this.usersService.remove(+id);
   }
 }

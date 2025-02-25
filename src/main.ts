@@ -5,10 +5,9 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
   app.enableCors({
     origin: 'http://localhost:3002',
-    methods: 'GET,POST,PUT,DELETE',
+    methods: 'GET,POST,PUT,DELETE,PATCH',
     allowedHeaders: 'Content-Type, Authorization',
   });
 

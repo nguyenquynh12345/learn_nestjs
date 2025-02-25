@@ -1,70 +1,46 @@
-import { Injectable } from '@nestjs/common';
+// users.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
+    private readonly usersRepository: Repository<User>,
+  ) { }
 
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = this.usersRepository.create(createUserDto);
+    return this.usersRepository.save(user);
+  }
+  async findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { email } });
+  }
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    return this.usersRepository.find();
   }
 
   async findOne(id: number): Promise<User> {
-    return await this.userRepository.findOneBy({ id });
-  }
-
-  async create(user: Partial<User>): Promise<User | any> {
-    // Kiểm tra độ dài tài khoản phải lớn hơn 5 ký tự
-    if (user.userName && user.userName.length <= 5) {
-      return {
-        code: 400,
-        message: 'Tài khoản phải có ít nhất 6 ký tự',
-        data: null,
-      };
-    }
-
-    const existingUser = await this.userRepository.findOne({
-      where: { userName: user.userName },
-    });
-
-    if (existingUser) {
-      return {
-        code: 400,
-        message: 'Tài khoản đã tồn tại',
-        data: null,
-      };
-    }
-
-    return await this.userRepository.save(user);
-  }
-
-  async update(id: any, userData: any): Promise<any> {
-    const user = await this.userRepository.findOne({
-      where: { id: userData.id },
-    });
-
+    const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
-      throw new Error('Người dùng không tồn tại');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
+    return user;
+  }
 
-    // Cập nhật thông tin người dùng
-    await this.userRepository.update(id, userData);
-
-    // Trả về thông tin người dùng sau khi cập nhật
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    await this.usersRepository.update(id, updateUserDto);
     return this.findOne(id);
   }
 
-  async remove(id: number): Promise<any> {
-    await this.userRepository.delete(id);
-    return {
-      code: 200,
-      message: 'Xóa người dùng thành công',
-      data: null,
-    };
+  async remove(id: number): Promise<void> {
+    const result = await this.usersRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
   }
 }

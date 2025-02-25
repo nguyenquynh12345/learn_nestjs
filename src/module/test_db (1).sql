@@ -32,7 +32,7 @@ CREATE TABLE `category_rooms` (
   `name` varchar(255) NOT NULL,
   `description` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `category_rooms`
@@ -52,7 +52,7 @@ CREATE TABLE `migrations` (
   `id` int NOT NULL,
   `timestamp` bigint NOT NULL,
   `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -62,7 +62,7 @@ CREATE TABLE `migrations` (
 
 CREATE TABLE `rooms` (
   `id` int NOT NULL,
-  `roomName` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `roomName` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text,
   `capacity` int DEFAULT NULL,
   `price` decimal(10,0) DEFAULT NULL,
@@ -72,12 +72,12 @@ CREATE TABLE `rooms` (
   `imageUrl` varchar(255) DEFAULT NULL,
   `userId` varchar(255) NOT NULL,
   `address` varchar(1000) NOT NULL,
-  `electricityPrice` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `electricityPrice` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `waterPrice` varchar(40) NOT NULL,
   `utilities` varchar(255) NOT NULL,
   `region` int NOT NULL,
   `categories` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `rooms`
@@ -99,7 +99,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `users`

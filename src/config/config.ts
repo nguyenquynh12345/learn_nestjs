@@ -1,9 +1,15 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Listing } from 'src/module/listings/entities/listing.entity';
 import { User } from 'src/module/users/entities/user.entity';
-import { Room } from 'src/module/room/entities/room.entity';
-import { CategoryRoom } from 'src/module/category-room/entities/category-room.entity';
+import { Booking } from 'src/module/bookings/entities/booking.entity';
+import { Favorite } from 'src/module/favorites/entities/favorite.entity';
+import { Review } from 'src/module/reviews/entities/review.entity';
+import { Category } from 'src/module/categories/entities/category.entity';
+import { Image } from 'src/module/images/entities/image.entity';
+import { Location } from 'src/module/locations/entities/location.entity';
+
 
 export function createTypeMysqlOrmOptions(): TypeOrmModuleOptions {
   return {
@@ -14,7 +20,7 @@ export function createTypeMysqlOrmOptions(): TypeOrmModuleOptions {
     password: process.env.DATABASE_MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
     migrations: [__dirname + '/../migrations/*{.ts,.js}'],
-    entities: [User, Room, CategoryRoom],
+    entities: [User, Listing, Booking, Favorite, Review, Category, Image, Location],
     synchronize: false,
     migrationsRun: true,
   };

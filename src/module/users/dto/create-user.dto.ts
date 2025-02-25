@@ -1,13 +1,21 @@
-import { IsString, IsEmail, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateUserDto {
     @IsString()
-    userName: string;
-
-    @IsString()
-    @MinLength(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' })
-    password: string;
+    @IsNotEmpty()
+    name: string;
 
     @IsEmail()
     email: string;
+
+    @IsString()
+    @MinLength(6)
+    password: string;
+
+    @IsOptional()
+    @IsString()
+    phone?: string;
+
+    @IsEnum(['owner', 'renter'])
+    role: 'owner' | 'renter';
 }

@@ -12,7 +12,7 @@ services:
     ports:
       - '3306:3306' # Mở cổng MySQL
     volumes:
-      - mysql_data:/var/lib/mysql # Gắn kết dữ liệu MySQL vào volume
+      - ./mysql_data:/var/lib/mysql # Gắn kết dữ liệu MySQL vào volume
     networks:
       - my-network
 
@@ -28,10 +28,6 @@ services:
       - mysql # Đảm bảo MySQL khởi động trước
     networks:
       - my-network
-
-volumes:
-  mysql_data:
-    # Volume để lưu trữ dữ liệu MySQL
 
 networks:
   my-network:

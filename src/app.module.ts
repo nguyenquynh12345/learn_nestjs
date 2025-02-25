@@ -4,19 +4,22 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { createTypeMysqlOrmOptions } from './config/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './module/users/users.module';
-import { LoginModule } from './module/login/login.module';
-import { RoomModule } from './module/room/room.module';
-import { CategoryRoomModule } from './module/category-room/category-room.module';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtAuthGuard } from './module/login/jwt-auth.guard';
 import { UploadModule } from './module/upload/upload.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { SearchModule } from './module/search/search.module';
+import { CategoriesModule } from './module/categories/categories.module';
+import { LocationsModule } from './module/locations/locations.module';
+import { ListingsModule } from './module/listings/listings.module';
+import { ImagesModule } from './module/images/images.module';
+import { ReviewsModule } from './module/reviews/reviews.module';
+import { FavoritesModule } from './module/favorites/favorites.module';
+import { BookingsModule } from './module/bookings/bookings.module';
+import { UsersModule } from './module/users/users.module';
+import { AuthModule } from './module/auth/auth.module';
+
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Đảm bảo ConfigModule được import
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) =>
@@ -26,16 +29,19 @@ import { SearchModule } from './module/search/search.module';
     MulterModule.register({
       dest: './uploads',
     }),
-    UploadModule,
-    UserModule,
-    LoginModule,
-    RoomModule,
-    CategoryRoomModule,
-    JwtModule,
-    UploadModule,
-    SearchModule,
+    UsersModule,
+    CategoriesModule,
+    LocationsModule,
+    ListingsModule,
+    ImagesModule,
+    ReviewsModule,
+    FavoritesModule,
+    BookingsModule,
+    AuthModule,
+    UploadModule
+
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

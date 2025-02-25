@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { SearchService } from './search.service';
-import { Room } from '../room/entities/room.entity';
 
 @Controller('search')
 export class SearchController {

@@ -1,19 +1,41 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
+import { Listing } from 'src/module/listings/entities/listing.entity';
+import { Review } from 'src/module/reviews/entities/review.entity';
+import { Favorite } from 'src/module/favorites/entities/favorite.entity';
+import { Booking } from 'src/module/bookings/entities/booking.entity';
 
-@Entity('users')
+@Entity({ name: 'users' })
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('increment', { unsigned: true })
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar', length: 255, nullable: false })
+    name: string;
+
+    @Column({ type: 'varchar', length: 255, unique: true, nullable: false })
     email: string;
 
-    @Column()
-    userName: string;
-    @Column()
-    phone: string;
-    @Column()
+    @Column({ type: 'varchar', length: 255, nullable: false })
     password: string;
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    created_at: Date;
+
+    @Column({ type: 'varchar', length: 15, nullable: true })
+    phone: string;
+
+    @Column({ type: 'enum', enum: ['owner', 'renter'], nullable: false })
+    role: 'owner' | 'renter';
+
+    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    created_date: Date;
+
+    @OneToMany(() => Listing, (listing) => listing.user)
+    listings: Listing[];
+
+    @OneToMany(() => Review, (review) => review.user)
+    reviews: Review[];
+
+    @OneToMany(() => Favorite, (favorite) => favorite.user)
+    favorites: Favorite[];
+
+    @OneToMany(() => Booking, (booking) => booking.user)
+    bookings: Booking[];
 }
