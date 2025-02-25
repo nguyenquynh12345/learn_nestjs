@@ -11,6 +11,7 @@ import { User } from '../users/entities/user.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Location } from '../locations/entities/location.entity';
 import { Image } from '../images/entities/image.entity';
+import { SearchListingDto } from '../search/dto/create-search.dto';
 
 @Injectable()
 export class ListingsService {
@@ -83,7 +84,54 @@ export class ListingsService {
     if (!listing) throw new NotFoundException(`Listing with ID ${id} not found`);
     return listing;
   }
+  async searchListings(searchDto: SearchListingDto) {
+    const { q, price, location, category, available, isApproved } = searchDto;
 
+    const query = this.listingsRepository
+      .createQueryBuilder('listing')
+      .leftJoinAndSelect('listing.user', 'user') // Lấy thông tin User
+      .leftJoinAndSelect('listing.images', 'images'); // Lấy danh sách Images
+
+    // Tìm kiếm theo tiêu đề hoặc mô tả
+    if (q) {
+      query.andWhere('listing.title LIKE :q OR listing.description LIKE :q', {
+        q: `%${q}%`,
+      });
+    }
+
+    // Lọc theo khoảng giá
+    if (price) {
+      const [minPrice, maxPrice] = price.split('-').map(Number);
+      if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+        query.andWhere('listing.price BETWEEN :minPrice AND :maxPrice', {
+          minPrice,
+          maxPrice,
+        });
+      }
+    }
+
+    // Lọc theo địa điểm
+    if (location) {
+      query.andWhere('listing.location = :location', { location });
+    }
+
+    // Lọc theo danh mục
+    if (category) {
+      query.andWhere('listing.category = :category', { category });
+    }
+
+    // Lọc theo trạng thái có sẵn
+    if (available !== undefined) {
+      query.andWhere('listing.available = :available', { available });
+    }
+
+    // Lọc theo trạng thái đã duyệt
+    if (isApproved !== undefined) {
+      query.andWhere('listing.isApproved = :isApproved', { isApproved });
+    }
+
+    return query.getMany();
+  }
   // async update(id: number, updateListingDto: UpdateListingDto): Promise<Listing> {
   //   await this.listingsRepository.update(id, updateListingDto);
   //   return this.findOne(id);

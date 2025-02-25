@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { CreateListingDto } from './dto/create-listing.dto';
 import { UpdateListingDto } from './dto/update-listing.dto';
+import { SearchListingDto } from '../search/dto/create-search.dto';
 
 @Controller('listings')
 export class ListingsController {
@@ -10,6 +11,10 @@ export class ListingsController {
   @Post()
   create(@Body() createListingDto: CreateListingDto) {
     return this.listingsService.createListing(createListingDto);
+  }
+  @Get('search')
+  async searchListings(@Query() searchDto: SearchListingDto) {
+    return this.listingsService.searchListings(searchDto);
   }
   @Post(':id/approve')
   async approveListing(@Param('id') id: number) {
